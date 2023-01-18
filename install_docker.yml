@@ -4,16 +4,22 @@
   become: true
   gather_facts: true
   tasks:
-    - name: Install Docker
+    - name: Install Docker and Mysql-server
       ansible.builtin.package:
         name:
           - docker-ce
           - docker-ce-cli
           - containerd.io
+          - mysql-server
         state: latest
 
     - name: Start Docker
       ansible.builtin.service:
         name: "docker"
+        state: started
+        enabled: true
+    - name: Start Mysql Server
+      ansible.builtin.service:
+        name: "mysql-server"
         state: started
         enabled: true
