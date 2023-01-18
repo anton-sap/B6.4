@@ -1,0 +1,19 @@
+---
+- name: Install latest Docker version
+  hosts: localhost
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Install Docker
+      ansible.builtin.package:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: latest
+
+    - name: Start Docker
+      ansible.builtin.service:
+        name: "docker"
+        state: started
+        enabled: true
