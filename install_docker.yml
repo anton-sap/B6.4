@@ -1,6 +1,7 @@
 ---
 - name: Install latest Docker version
   hosts: localhost
+  connection: local
   become: true
   gather_facts: true
   tasks:
@@ -11,15 +12,29 @@
           - docker-ce-cli
           - containerd.io
           - mysql-server
+          - nginx
         state: latest
+
+    - name: Edit nginx index
+      template:
+        src: /root/templates/nginx.j2
+        dest: /usr/share/nginx/html/index.html
 
     - name: Start Docker
       ansible.builtin.service:
         name: "docker"
         state: started
         enabled: true
+
     - name: Start Mysql Server
       ansible.builtin.service:
-        name: "mysql-server"
+        name: "mysqld"
         state: started
         enabled: true
+
+    - name: Start nginx
+      ansible.builtin.service:
+        name: "nginx"
+        state: started
+        enabled: true
+
